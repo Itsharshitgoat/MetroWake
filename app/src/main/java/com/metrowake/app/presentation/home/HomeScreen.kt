@@ -69,56 +69,96 @@ fun HomeScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        Text(
-            text = "MetroWake",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = "Never Miss Your Station.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "METROWAKE",
+                style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Black),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 4.dp),
+                letterSpacing = androidx.compose.ui.unit.TextUnit(4f, androidx.compose.ui.unit.TextUnitType.Sp)
+            )
+            Text(
+                text = "Never miss your station.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+        }
 
         // Ticket Card
-        Card(
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            shape = com.metrowake.app.presentation.components.TicketShape(),
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = 8.dp
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
-                Text(
-                    text = "TICKET",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "TICKET",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary,
+                        letterSpacing = androidx.compose.ui.unit.TextUnit(2f, androidx.compose.ui.unit.TextUnitType.Sp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
 
-                RouteSelectionRow(
-                    label = "FROM",
-                    station = selectedStart?.name ?: "Select Station",
-                    onClick = {
-                        isSelectingStart = true
-                        showStationSelector = true
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    // Vertical Metro Line Visual
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(top = 28.dp, bottom = 28.dp, end = 16.dp)
+                    ) {
+                        Box(modifier = Modifier.size(12.dp).clip(androidx.compose.foundation.shape.CircleShape).background(MaterialTheme.colorScheme.primary))
+                        Box(modifier = Modifier.width(2.dp).height(48.dp).background(MaterialTheme.colorScheme.primary))
+                        Box(modifier = Modifier.size(12.dp).clip(androidx.compose.foundation.shape.CircleShape).background(MaterialTheme.colorScheme.secondary))
                     }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
 
-                RouteSelectionRow(
-                    label = "TO",
-                    station = selectedDestination?.name ?: "Select Destination",
-                    onClick = {
-                        isSelectingStart = false
-                        showStationSelector = true
+                    Column(modifier = Modifier.weight(1f)) {
+                        RouteSelectionRow(
+                            label = "FROM",
+                            station = selectedStart?.name?.uppercase() ?: "SELECT STATION",
+                            onClick = {
+                                isSelectingStart = true
+                                showStationSelector = true
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        RouteSelectionRow(
+                            label = "TO",
+                            station = selectedDestination?.name?.uppercase() ?: "SELECT DESTINATION",
+                            onClick = {
+                                isSelectingStart = false
+                                showStationSelector = true
+                            }
+                        )
                     }
-                )
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
+
+                // Network Panel (Bottom of ticket)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(text = "NETWORK", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        Text(text = "Delhi Metro", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface)
+                    }
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(text = "STATUS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        Text(text = "Active", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.tertiary)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(48.dp))
 
                 Button(
                     onClick = {
@@ -138,12 +178,12 @@ fun HomeScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
+                        .height(64.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(32.dp) // pill shape
                 ) {
                     Text(
-                        text = "START JOURNEY",
+                        text = "▶ START JOURNEY",
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.White
                     )
